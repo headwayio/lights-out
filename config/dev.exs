@@ -16,7 +16,8 @@ config :lights_out_game, LightsOutGameWeb.Endpoint,
   secret_key_base: "UbrI7WB/BzK/97E1ftJx1JyijCodCXl/M20TAKWsk/BY53n7glBaLJtQnNJ5fEtJ",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
 # ## SSL Support
