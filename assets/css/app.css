@@ -122,3 +122,10 @@
   100% { opacity: 0; }
 }
 
+button {
+  @apply bg-stone-300;
+}
+
+button[data-on] {
+  @apply bg-rose-400;
+}
