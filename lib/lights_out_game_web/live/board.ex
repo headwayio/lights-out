@@ -5,7 +5,7 @@ defmodule LightsOutGameWeb.Board do
     grid = for x <- 0..4, y <- 0..4, into: %{}, do: {{x, y}, false}
     level1 = %{{2, 0} => true, {2, 2} => true, {2, 4} => true}
     grid = Map.merge(grid, level1)
-    {:ok, assign(socket, grid: grid)}
+    {:ok, assign(socket, grid: grid, win: false)}
   end
 
   def handle_event("toggle", %{"x" => strX, "y" => strY}, socket) do
@@ -20,7 +20,9 @@ defmodule LightsOutGameWeb.Board do
       end)
       |> then(fn toggled_grid -> Map.merge(grid, toggled_grid) end)
 
-    {:noreply, assign(socket, :grid, updated_grid)}
+    win = check_win(updated_grid)
+
+    {:noreply, assign(socket, grid: updated_grid, win: win)}
   end
 
   defp find_adjacent_tiles(x, y) do
@@ -30,5 +32,11 @@ defmodule LightsOutGameWeb.Board do
     nextY = Kernel.min(4, y + 1)
 
     [{x, y}, {prevX, y}, {nextX, y}, {x, prevY}, {x, nextY}]
+  end
+
+  defp check_win(grid) do
+    grid
+    |> Map.values()
+    |> Enum.all?(&(!&1))
   end
 end

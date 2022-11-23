@@ -45,7 +45,7 @@ defmodule LightsOutGameWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {LightsOutGameWeb.LayoutView, "live.html"}
+        layout: {LightsOutGameWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end
@@ -94,6 +94,8 @@ defmodule LightsOutGameWeb do
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
+
+      import Phoenix.Component, only: [live_flash: 2, assign: 2]
 
       import LightsOutGameWeb.ErrorHelpers
       import LightsOutGameWeb.Gettext

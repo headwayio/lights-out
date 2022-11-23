@@ -4,4 +4,5 @@
       <button class="block h-20 px-4 py-6 text-center border rounded" phx-click="toggle" phx-value-x={x} phx-value-y={y} data-on={value}></button>
     <% end %>
   </div>
+  <p class="text-3xl text-center" :if={@win}>You won!</p>
 </div>
