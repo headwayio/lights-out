@@ -22,7 +22,12 @@ defmodule LightsOutGameWeb.Board do
 
     win = check_win(updated_grid)
 
-    {:noreply, assign(socket, grid: updated_grid, win: win)}
+    socket = assign(socket, grid: updated_grid, win: win)
+
+    case win do
+      true -> {:noreply, push_event(socket, "gameover", %{win: win})}
+      _ -> {:noreply, socket}
+    end
   end
 
   defp find_adjacent_tiles(x, y) do
