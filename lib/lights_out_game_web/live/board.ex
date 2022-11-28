@@ -50,6 +50,23 @@ defmodule LightsOutGameWeb.Board do
     [{x, y}, {prevX, y}, {nextX, y}, {x, prevY}, {x, nextY}]
   end
 
+  def next_game(game) do
+    count_games()
+    |> Kernel.min(game + 1)
+  end
+
+  def prev_game(game), do: Kernel.max(1, game - 1)
+
+  def first_game?(game), do: game === 1
+
+  def last_game?(game), do: game == count_games()
+
+  defp count_games do
+    games()
+    |> Map.keys()
+    |> length()
+  end
+
   defp reset_grid do
     for x <- 0..4, y <- 0..4, into: %{}, do: {{x, y}, false}
   end

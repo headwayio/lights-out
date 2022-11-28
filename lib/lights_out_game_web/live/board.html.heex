@@ -4,5 +4,12 @@
       <button class="block h-20 px-4 py-6 text-center border rounded" phx-click="toggle" phx-value-x={x} phx-value-y={y} data-on={value}></button>
     <% end %>
   </div>
+  <div class="flex justify-between items-center mb-8">
+    <%= live_patch "Reset", to: Routes.live_path(@socket, LightsOutGameWeb.Board, @game), class: "self-center px-4 py-2 bg-purple-700 text-white text-sm uppercase rounded" %>
+    <div class="flex space-x-2">
+      <%= live_patch raw("&laquo;"), to: Routes.live_path(@socket, LightsOutGameWeb.Board, prev_game(@game)), class: "self-center px-4 py-2 bg-purple-700 text-sm text-white uppercase rounded data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none", data: [disabled: first_game?(@game)] %>
+      <%= live_patch raw("&raquo;"), to: Routes.live_path(@socket, LightsOutGameWeb.Board, next_game(@game)), class: "self-center px-4 py-2 bg-purple-700 text-sm text-white uppercase rounded data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none", data: [disabled: last_game?(@game)] %>
+    </div>
+  </div>
   <p class="text-3xl text-center" :if={@win}>You won!</p>
 </div>
