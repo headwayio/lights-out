@@ -1,5 +1,6 @@
 defmodule LightsOutGameWeb.Board do
   use LightsOutGameWeb, :live_view
+  import LightsOutGameWeb.Games
 
   def mount(_params, _session, socket) do
     {:ok, assign(socket, grid: %{}, win: false)}
@@ -54,9 +55,7 @@ defmodule LightsOutGameWeb.Board do
   end
 
   defp load_game(grid, id) do
-    games = %{1 => [{2, 0}, {2, 2}, {2, 4}]}
-
-    games
+    games()
     |> Map.get(id, [])
     |> then(fn game -> setup_tiles(grid, game) end)
   end
