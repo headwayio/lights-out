@@ -2,10 +2,20 @@ defmodule LightsOutGameWeb.Board do
   use LightsOutGameWeb, :live_view
 
   def mount(_params, _session, socket) do
-    grid = for x <- 0..4, y <- 0..4, into: %{}, do: {{x, y}, false}
-    level1 = %{{2, 0} => true, {2, 2} => true, {2, 4} => true}
-    grid = Map.merge(grid, level1)
-    {:ok, assign(socket, grid: grid, win: false)}
+    {:ok, assign(socket, grid: %{}, win: false)}
+  end
+
+  def handle_params(params, _uri, socket) do
+    grid = reset_grid()
+
+    case params["game_id"] do
+      game when not is_nil(game) ->
+        game_id = String.to_integer(game)
+        {:noreply, assign(socket, game: game_id, grid: load_game(grid, game_id), win: false)}
+
+      _ ->
+        {:noreply, push_patch(socket, to: "/1")}
+    end
   end
 
   def handle_event("toggle", %{"x" => strX, "y" => strY}, socket) do
@@ -37,6 +47,26 @@ defmodule LightsOutGameWeb.Board do
     nextY = Kernel.min(4, y + 1)
 
     [{x, y}, {prevX, y}, {nextX, y}, {x, prevY}, {x, nextY}]
+  end
+
+  defp reset_grid do
+    for x <- 0..4, y <- 0..4, into: %{}, do: {{x, y}, false}
+  end
+
+  defp load_game(grid, id) do
+    games = %{1 => [{2, 0}, {2, 2}, {2, 4}]}
+
+    games
+    |> Map.get(id, [])
+    |> then(fn game -> setup_tiles(grid, game) end)
+  end
+
+  defp setup_tiles(grid, []), do: grid
+
+  defp setup_tiles(grid, [{x, y} | rest]) do
+    grid
+    |> Map.put({x, y}, true)
+    |> setup_tiles(rest)
   end
 
   defp check_win(grid) do

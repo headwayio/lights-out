@@ -19,6 +19,7 @@ defmodule LightsOutGameWeb.Router do
 
     # get "/", PageController, :index
     live "/", Board
+    live "/:game_id", Board
   end
 
   # Other scopes may use custom stacks.
